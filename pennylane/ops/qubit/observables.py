@@ -55,6 +55,14 @@ class Hermitian(Operator):
         A (array or Sequence): square hermitian matrix
         wires (Sequence[int] or int): the wire(s) the operation acts on
         id (str or None): String representing the operation (optional)
+
+    .. warning::
+
+       ``Hermitian`` is not compatible with :func:`~.probs`. When using
+       :func:`~.probs` with a Hermitian observable, the output might be different than
+       expected as the lexicographical ordering of eigenvalues is not guaranteed and
+       the diagonalizing gates may exist in a degenerate subspace.
+
     """
 
     _queue_category = None
@@ -367,8 +375,6 @@ class SparseHamiltonian(Operator):
         return H.toarray()
 
     # pylint: disable=arguments-differ
-    # TODO: Remove when PL supports pylint==3.3.6 (it is considered a useless-suppression) [sc-91362]
-    # pylint: disable=unused-argument
     @staticmethod
     def compute_sparse_matrix(H: spmatrix, format="csr") -> spmatrix:
         r"""Representation of the operator as a sparse canonical matrix in the computational basis (static method).
